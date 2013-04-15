@@ -66,7 +66,10 @@ class Entry(object):
             value = ";".join(self.value)
         else:
             value = self.value
-        return "{key}[{locale}]={_value}".format(_value=value, **self.__dict__)
+        if self.locale is not None:
+            return "{key}[{locale}]={_value}".format(_value=value, **self.__dict__)
+        else:
+            return "{key}={_value}".format(_value=value, **self.__dict__)
 
 
 def desktop_file_parser(input_stream):
