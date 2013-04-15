@@ -2,6 +2,10 @@
 """Tests (nose)."""
 
 import io
+import difflib
+
+from pprint import pprint as pp
+
 
 def test_desktop_file_parser1():
     """
@@ -31,5 +35,9 @@ MimeType=application/mathml+xml;application/xhtml+xml;application/x-perl;applica
     df = io.StringIO(desktop_file_content)
     dfo = desktop_file_parser(df)
     assert dfo
-    # TODO: Compare dfo and desktop_file_content
-
+    # Compare dfo and desktop_file_content
+    d = difflib.Differ()
+    dfo_org_strs = [ x for x in desktop_file_content.splitlines() if x ]
+    dfo_strs = str(dfo).splitlines()
+    dfs = [ x for x in list(d.compare(dfo_org_strs, dfo_strs)) if not x.startswith(" ") ]
+    assert not dfs
