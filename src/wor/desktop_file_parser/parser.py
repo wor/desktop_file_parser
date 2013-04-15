@@ -8,7 +8,7 @@ from .tokenizer import init_tokenizer
 
 
 class DesktopFile(object):
-    """Desktop file"""
+    """Desktop file."""
     def __init__(self, entry_groups):
         self.entry_groups = entry_groups
     def __str__(self):
@@ -19,7 +19,10 @@ class DesktopFile(object):
                 df_str += str(e) + "\n"
         return df_str
     def get_entry_key_from_group(self, entry_key, group="Desktop Entry"):
-        """
+        """Returns entry with given key from specified group.
+
+        Returns:
+            Entry. Entry which .key == entry_key or None if not found.
         """
         for e in self.entry_groups[group]:
             if e.key == entry_key:
@@ -51,7 +54,7 @@ class DesktopFile(object):
 
 
 class Entry(object):
-    """Desktop files entry"""
+    """Desktop files entry."""
     def __init__(self, key, value, locale):
         self.key = key
         self.value = value
