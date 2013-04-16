@@ -138,11 +138,11 @@ def desktop_file_parser(input_stream):
 
     df = DesktopFile(entry_groups)
 
-    print("==========DEBUG=========")
-    print(df)
-    ok, error = df.check()
-    if not ok:
-        print(error)
-    print("==========DEBUG=========")
+    #print("==========DEBUG=========")
+    #print(df)
+    #ok, error = df.check()
+    #if not ok:
+    #    print(error)
+    #print("==========DEBUG=========")
 
     return df
