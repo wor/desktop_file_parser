@@ -9,8 +9,9 @@ from .tokenizer import init_tokenizer
 
 class DesktopFile(object):
     """Desktop file."""
-    def __init__(self, entry_groups):
+    def __init__(self, entry_groups, file_name=""):
         self.entry_groups = entry_groups
+        self.file_name = file_name
     def __str__(self):
         df_str = ""
         for g in self.entry_groups:
@@ -136,7 +137,10 @@ def parse(input_stream):
     except tok.TokenizerException as e:
         raise e
 
-    df = DesktopFile(entry_groups)
+    # Read orginal filename for the desktop file object from the input_stream
+    file_name = input_stream.name if hasattr(input_stream, "name") else ""
+
+    df = DesktopFile(entry_groups, file_name=file_name)
 
     #print("==========DEBUG=========")
     #print(df)
