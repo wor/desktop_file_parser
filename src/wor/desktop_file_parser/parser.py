@@ -72,7 +72,7 @@ class Entry(object):
             return "{key}={_value}".format(_value=value, **self.__dict__)
 
 
-def desktop_file_parser(input_stream):
+def parse(input_stream):
     """Parses desktop entry file.
 
     Args:
