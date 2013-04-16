@@ -99,6 +99,9 @@ def parse(input_stream):
         for t in tokens:
             if t.basename == "EmptyLine_T":
                 continue
+            elif t.basename == "CommentLine_T":
+                # TODO: don't throw away!
+                continue
             elif t.basename == "GroupHeader_T":
                 current_group = t.subvalues[0]
                 entry_groups[current_group] = []
