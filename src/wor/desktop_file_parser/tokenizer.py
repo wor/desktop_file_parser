@@ -14,6 +14,7 @@ SYMBOL_CLASS_NAMES = [
 "Version",
 "Name",
 "GenericName",
+"NoDisplay",
 "Comment",
 "Icon",
 "Hidden",
