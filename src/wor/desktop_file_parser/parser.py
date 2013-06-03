@@ -29,6 +29,17 @@ class DesktopFile(object):
             if e.key == entry_key:
                 return e
         return None
+    def get_entry_value_from_group(self, entry_key, group="Desktop Entry"):
+        """Returns entries value with given key from specified group.
+
+        Returns:
+            str|bool|[str]. Entry.value which Entry.key == entry_key or None if
+                not found.
+        """
+        e = self.get_entry_key_from_group(entry_key, group=group)
+        if e:
+            return e.value
+        return None
     def check(self):
         """Checks if Desktop file is valid according to the specification.
 
