@@ -31,6 +31,10 @@ SYMBOL_CLASS_NAMES = [
 "StartupNotify",
 "StartupWMClass",
 "URL",
+#"X-Desktop-File-Install-Version",
+#"X-SingleInstance",
+#"X-GNOME-Bugzilla-Bugzilla",
+#"InitialPreference",
 ]
 
 #
