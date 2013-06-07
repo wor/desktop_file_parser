@@ -2,7 +2,6 @@
 """Desktop file tokenizer."""
 
 import types
-import re
 import wor.tokenizer as tok
 
 # What is needed to use tok.Token from Symbol
@@ -31,10 +30,10 @@ SYMBOL_CLASS_NAMES = [
 "StartupNotify",
 "StartupWMClass",
 "URL",
-#"X-Desktop-File-Install-Version",
-#"X-SingleInstance",
-#"X-GNOME-Bugzilla-Bugzilla",
-#"InitialPreference",
+"X-Desktop-File-Install-Version",
+"X-SingleInstance",
+"X-GNOME-Bugzilla-Bugzilla",
+"InitialPreference",
 ]
 
 #
