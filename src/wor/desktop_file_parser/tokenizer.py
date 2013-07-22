@@ -30,10 +30,6 @@ SYMBOL_CLASS_NAMES = [
 "StartupNotify",
 "StartupWMClass",
 "URL",
-"X-Desktop-File-Install-Version",
-"X-SingleInstance",
-"X-GNOME-Bugzilla-Bugzilla",
-"InitialPreference",
 ]
 
 #
@@ -70,6 +66,9 @@ def init_tokenizer():
     ns = symbol_table.add_new_token
     for symbol_name in SYMBOL_CLASS_NAMES:
         ns(symbol_name.upper().replace('-','_'), r"^(" + symbol_name + r")(\[.+\])?=(.*)$\n?", token_subclass=Entry_T)
+
+    # Ignore non-spec tokens
+    ns("IGNORED", r"^(.*)(\[.+\])?=(.*)$\n?", ignore=True, token_subclass=Entry_T)
 
     ns("COMMENT_LINE", r"^#(.*)\n", token_subclass=CommentLine_T)
     ns("EMPTY_LINE", r"^\s*\n", token_subclass=EmptyLine_T)
