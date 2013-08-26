@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*- vim:fenc=utf-8:ft=python:et:sw=4:ts=4:sts=4
-"""Desktop file parser."""
+"""Desktop file parser.
+TODO: rename get_entry_key_from_group
+"""
 
 from pprint import pprint as pp
 
