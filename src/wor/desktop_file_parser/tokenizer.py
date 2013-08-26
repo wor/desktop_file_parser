@@ -71,7 +71,7 @@ def init_tokenizer():
     ns("IGNORED", r"^(.*)(\[.+\])?=(.*)$\n?", ignore=True, token_subclass=Entry_T)
 
     ns("COMMENT_LINE", r"^#(.*)\n", token_subclass=CommentLine_T)
-    ns("EMPTY_LINE", r"^\s*\n", token_subclass=EmptyLine_T)
+    ns("EMPTY_LINE", r"^[ \t\r\f\v]*\n", token_subclass=EmptyLine_T)
     ns("GROUP_HEADER", r"^\[(.+)\]\s*$\n?", token_subclass=GroupHeader_T)
 
     # Create tokenizer with defined symbol table
