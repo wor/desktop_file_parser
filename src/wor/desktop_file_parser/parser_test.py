@@ -4,8 +4,6 @@
 import io
 import difflib
 
-from pprint import pprint as pp
-
 #
 # Test helper funcs
 #
