@@ -56,5 +56,6 @@ setup(name='desktop_file_parser',
 
     entry_points={
         'console_scripts': console_scripts
-    }
+    },
+    test_suite='nose.collector',
 )
