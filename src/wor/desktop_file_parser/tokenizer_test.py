@@ -103,3 +103,31 @@ MimeType=application/mathml+xml;application/xhtml+xml;application/x-perl;applica
 """
     df = io.StringIO(desktop_file_content)
     assert helper_iterate_tokens(df)
+
+def test_desktop_file_tokenizer4():
+    """
+    """
+    desktop_file_content = """# comment 1
+[Desktop Entry]
+Name=qiv
+Comment=a fast gdk/imlib image viewer for X
+Exec=qiv -R -u -t %F
+# comment 2
+Terminal=false
+# comment 3
+
+Type=Application
+#
+# comment 4
+#
+Categories=Viewer;Utility;
+
+# comment 5
+
+MimeType=image/jpeg;image/png;
+
+# comment 6
+StartupNotify=false
+"""
+    df = io.StringIO(desktop_file_content)
+    assert helper_iterate_tokens(df)
