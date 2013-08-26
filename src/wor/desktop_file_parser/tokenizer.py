@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*- vim:fenc=utf-8:ft=python:et:sw=4:ts=4:sts=4
 """Desktop file tokenizer."""
 
-import types
 import wor.tokenizer as tok
 
 # What is needed to use tok.Token from Symbol
@@ -50,7 +49,7 @@ class Entry_T(tok.Token):
     pass
 
 
-def init_tokenizer():
+def init_tokenizer(ignore_nonspec_keys=False):
     """Initializes desktop file tokenizer and returns it.
 
     Returns:
@@ -67,8 +66,11 @@ def init_tokenizer():
     for symbol_name in SYMBOL_CLASS_NAMES:
         ns(symbol_name.upper().replace('-','_'), r"^(" + symbol_name + r")(\[.+\])?=(.*)$\n?", token_subclass=Entry_T)
 
-    # Ignore non-spec tokens
-    ns("IGNORED", r"^(.*)(\[.+\])?=(.*)$\n?", ignore=True, token_subclass=Entry_T)
+    # Ignore or add non-spec tokens
+    if ignore_nonspec_keys:
+        ns("IGNORED", r"^(.*)(\[.+\])?=(.*)$\n?", ignore=True, token_subclass=Entry_T)
+    else:
+        ns("NONSPEC", r"^(.*)(\[.+\])?=(.*)$\n?", ignore=False, token_subclass=Entry_T)
 
     ns("COMMENT_LINE", r"^#(.*)\n", token_subclass=CommentLine_T)
     ns("EMPTY_LINE", r"^[ \t\r\f\v]*\n", token_subclass=EmptyLine_T)

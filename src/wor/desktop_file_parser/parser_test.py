@@ -72,3 +72,22 @@ Icon=2EF4_wordpad.0
     # Compare dfo and desktop_file_content
     dfs = diff_helper(dfo, desktop_file_content)
     assert not dfs
+
+def test_parse3():
+    """
+    """
+    desktop_file_content = """
+[Desktop Entry]
+Type=Application
+Name=wordpad
+MimeType=application/rtf;
+Exec=env WINEPREFIX="/home/wor/.wine" wine start /ProgIDOpen rtffile %f
+NoDisplay=true
+StartupNotify=true
+NonSpecKey=non-spec value
+"""
+    dfo = parse_helper(desktop_file_content)
+    assert dfo
+    # Compare dfo and desktop_file_content
+    dfs = diff_helper(dfo, desktop_file_content)
+    assert not dfs
