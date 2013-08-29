@@ -9,7 +9,7 @@ from .tokenizer import init_tokenizer
 
 class DesktopFile(object):
     """Desktop file."""
-    def __init__(self, entry_groups, file_name=""):
+    def __init__(self, entry_groups={}, file_name=""):
         self.entry_groups = entry_groups
         self.file_name = file_name
     def __str__(self):
@@ -19,6 +19,49 @@ class DesktopFile(object):
             for e in self.entry_groups[g]:
                 df_str += str(e) + "\n"
         return df_str
+    def setup_with(self, key_value_pairs=[]):
+        """Simple and limited initialization of a empty desktop file.
+
+        Initializes a desktop file with given key_value_pairs as entries in the
+        "Desktop Entry" group. Doesn't support entry locale and if not given
+        defaults to following values:
+            Encoding=UTF-8
+            Type=Application
+            Name=Unkown Application
+            Exec=echo %f
+
+        If Desktop files "Desktop Entry" group is not empty then this doesn't do
+        anything.
+
+        Parameters:
+            key_value_pairs: [(str, str)]. List of key value tuples.
+        """
+        if self.entry_groups["Desktop Entry"]:
+            return
+
+        # Ok, this could be cleaner :)
+        encoding_added = False
+        type_added = False
+        name_added = False
+        exec_added = False
+        for kvp in key_value_pairs:
+            if kvp[0] == "Encoding":
+                encoding_added = True
+            elif kvp[0] == "Type":
+                type_added = True
+            elif kvp[0] == "Name":
+                name_added = True
+            elif kvp[0] == "Exec":
+                exec_added = True
+            self.entry_groups["Desktop Entry"].append(Entry(kvp[0], kvp[1], None))
+        if not encoding_added:
+            self.entry_groups["Desktop Entry"].append(Entry("Encoding", "UTF-8", None))
+        if not type_added:
+            self.entry_groups["Desktop Entry"].append(Entry("Type", "Application", None))
+        if not name_added:
+            self.entry_groups["Desktop Entry"].append(Entry("Name", "Unkown Application", None))
+        if not exec_added:
+            self.entry_groups["Desktop Entry"].append(Entry("Exec", "echo %f", None))
     def get_entry_key_from_group(self, entry_key, group="Desktop Entry"):
         """Returns entry with given key from specified group.
 
