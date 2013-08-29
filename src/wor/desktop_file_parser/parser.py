@@ -3,8 +3,6 @@
 TODO: rename get_entry_key_from_group
 """
 
-from pprint import pprint as pp
-
 import wor.tokenizer as tok
 from .tokenizer import init_tokenizer
 
