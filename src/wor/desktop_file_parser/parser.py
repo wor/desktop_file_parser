@@ -36,8 +36,9 @@ class DesktopFile(object):
         Parameters:
             key_value_pairs: [(str, str)]. List of key value tuples.
         """
-        if self.entry_groups["Desktop Entry"]:
+        if "Desktop Entry" in self.entry_groups.keys():
             return
+        self.entry_groups["Desktop Entry"] = []
 
         # Ok, this could be cleaner :)
         encoding_added = False
