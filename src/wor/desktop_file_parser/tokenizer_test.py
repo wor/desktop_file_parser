@@ -4,23 +4,16 @@
 import io
 
 def helper_iterate_tokens(input_stream):
-    from .tokenizer import init_tokenizer
+    from .tokenizer import tok_gen
 
-    tknzr = init_tokenizer()
     input_text = input_stream.read()
-    tokens = tknzr.get_tokens_gen(input_text, yield_eop=False)
+    tokens = tok_gen(input_text)
 
     for t in tokens:
         pass
     return True
 
 # =========================================
-
-def test_init_tokenizer():
-    """Tests if desktop file parsers initialization works.
-    """
-    from .tokenizer import init_tokenizer
-    assert init_tokenizer()
 
 def test_desktop_file_tokenizer1():
     """
