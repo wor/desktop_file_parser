@@ -192,12 +192,4 @@ def parse(input_stream):
     file_name = input_stream.name if hasattr(input_stream, "name") else ""
 
     df = DesktopFile(entry_groups, file_name=file_name)
-
-    #print("==========DEBUG=========")
-    #print(df)
-    #ok, error = df.check()
-    #if not ok:
-    #    print(error)
-    #print("==========DEBUG=========")
-
     return df
