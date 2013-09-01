@@ -3,9 +3,7 @@
 TODO: rename get_entry_key_from_group
 """
 
-import wor.tokenizer as tok
-from .tokenizer import init_tokenizer
-
+from .tokenizer import tok_gen
 
 class DesktopFile(object):
     """Desktop file."""
@@ -141,9 +139,7 @@ def parse(input_stream):
         wor.tokenizer.TokenizerException. If the tokenization of input stream fails.
         ParsingError. If parsing of the desktop file fails.
     """
-    tknzr = init_tokenizer()
-    input_text = input_stream.read()
-    tokens = tknzr.get_tokens_gen(input_text, yield_eop=False)
+    tokens = tok_gen(input_stream.read())
 
     # Desktop files entry groups
     entry_groups = {}
@@ -152,23 +148,21 @@ def parse(input_stream):
     try:
         current_group = None
         for t in tokens:
-            if t.basename == "EmptyLine_T":
+            name = t[0]
+            subvalues = t[1]
+            if name == "EMPTY_LINE":
                 continue
-            elif t.basename == "CommentLine_T":
+            elif name == "COMMENT_LINE":
                 # TODO: don't throw away!
                 continue
-            elif t.basename == "GroupHeader_T":
-                current_group = t.subvalues[0]
+            elif name == "GROUP_HEADER":
+                current_group = subvalues[0]
                 entry_groups[current_group] = []
                 continue
-            elif t.basename == "Entry_T":
-                entry_name = t.subvalues[0]
-                if len(t.subvalues) >= 3:
-                    entry_value = t.subvalues[2]
-                    entry_locale = t.subvalues[1].strip("[]")
-                else:
-                    entry_value = t.subvalues[1]
-                    entry_locale = None
+            elif name == "ENTRY":
+                entry_name = subvalues[0]
+                entry_value = subvalues[2]
+                entry_locale = subvalues[1].strip("[]") if subvalues[1] else None
                 entry = Entry(entry_name, entry_value, entry_locale)
 
                 # Check boolean entries
@@ -190,9 +184,8 @@ def parse(input_stream):
 
                 entry_groups[current_group].append(entry)
             else:
-                print("ERROR:", t.__class__.__base__.__name__, t.__class__.__name__)
                 assert(False)
-    except tok.TokenizerException as e:
+    except SyntaxError as e:
         raise e
 
     # Read orginal filename for the desktop file object from the input_stream

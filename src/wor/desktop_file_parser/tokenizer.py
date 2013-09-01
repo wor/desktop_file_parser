@@ -1,85 +1,46 @@
 # -*- coding: utf-8 -*- vim:fenc=utf-8:ft=python:et:sw=4:ts=4:sts=4
 """Desktop file tokenizer."""
 
-import wor.tokenizer as tok
-
-# What is needed to use tok.Token from Symbol
-
-SYMBOL_CLASS_NAMES = [
-"Encoding",
-"X-MultipleArgs",
-"Type",
-"Version",
-"Name",
-"GenericName",
-"NoDisplay",
-"Comment",
-"Icon",
-"Hidden",
-"OnlyShowIn",
-"NotShowIn",
-"TryExec",
-"Exec",
-"Path",
-"Terminal",
-"Actions",
-"MimeType",
-"Categories",
-"Keywords",
-"StartupNotify",
-"StartupWMClass",
-"URL",
-]
-
-#
-# Token classes
-#
-
-class GroupHeader_T(tok.Token):
-    """Token class for desktop entry file group headers."""
-    pass
-
-class EmptyLine_T(tok.Token):
-    pass
-
-class CommentLine_T(tok.Token):
-    pass
-
-class Entry_T(tok.Token):
-    pass
+import re
+from collections import OrderedDict
 
 
-def init_tokenizer(ignore_nonspec_keys=False):
-    """Initializes desktop file tokenizer and returns it.
+def tok_gen(text):
+    """Simplified token generator.
+
+    As Desktop files are not really that complex to tokenize, this function
+    replaces the tokenizer dependency.
+    Parameters:
+        text: str. Desktop file as string.
 
     Returns:
-        wor.tokenizer.Tokenizer. Initialized instance of Tokenizer class.
+        (str,()).
     """
-    # Create symbol table
-    symbol_table = tok.TokenTable("Main")
-    symbol_table.default_token_class = tok.Token
+    print(text)
 
-    # Add symbols to the symbol table
-    # The symbol regexp are interpreted as multiline regex when tokenizer joins
-    # them.
-    ns = symbol_table.add_new_token
-    for symbol_name in SYMBOL_CLASS_NAMES:
-        ns(symbol_name.upper().replace('-','_'), r"^(" + symbol_name + r")(\[.+\])?=(.*)$\n?", token_subclass=Entry_T)
+    reg = r"""(?P<ENTRY>^(.*)(\[.+\])?=(.*)$\n?)|(?P<COMMENT_LINE>^#(.*)\n)|(?P<EMPTY_LINE>^[ \t\r\f\v]*\n)|(?P<GROUP_HEADER>^\[(.+)\]\s*$\n?)"""
+    r = re.compile(reg, re.MULTILINE)
 
-    # Ignore or add non-spec tokens
-    if ignore_nonspec_keys:
-        ns("IGNORED", r"^(.*)(\[.+\])?=(.*)$\n?", ignore=True, token_subclass=Entry_T)
-    else:
-        ns("NONSPEC", r"^(.*)(\[.+\])?=(.*)$\n?", ignore=False, token_subclass=Entry_T)
+    tok_gen.groups = OrderedDict(sorted(r.groupindex.items(), key=lambda t: t[1]))
 
-    ns("COMMENT_LINE", r"^#(.*)\n", token_subclass=CommentLine_T)
-    ns("EMPTY_LINE", r"^[ \t\r\f\v]*\n", token_subclass=EmptyLine_T)
-    ns("GROUP_HEADER", r"^\[(.+)\]\s*$\n?", token_subclass=GroupHeader_T)
+    # Make tok_gen.groups contain mapping from regex group name to submatch
+    # range. Submatch range start-1 is the whole match.
+    last_i = None
+    for i in tok_gen.groups.items():
+        if last_i == None:
+            last_i = i
+            continue
+        tok_gen.groups[last_i[0]] = (last_i[1], i[1]-1)
+        last_i = i
+    tok_gen.groups[last_i[0]] = (last_i[1], r.groups)
 
-    # Create tokenizer with defined symbol table
-    try:
-        inited_tokenizer = tok.Tokenizer(symbol_table)
-    except tok.TokenizerRegexpError as e:
-        raise e
-
-    return inited_tokenizer
+    pos = 0
+    while True:
+        m = r.match(text, pos)
+        if not m:
+            if pos != len(text):
+                raise SyntaxError("Tokenization failed!")
+            break
+        pos = m.end()
+        yield m.lastgroup, m.groups()[ tok_gen.groups[m.lastgroup][0]:
+                tok_gen.groups[m.lastgroup][1]]
