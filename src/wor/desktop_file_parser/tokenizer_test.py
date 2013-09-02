@@ -10,7 +10,12 @@ def helper_iterate_tokens(input_stream):
     tokens = tok_gen(input_text)
 
     for t in tokens:
-        pass
+        name = t[0]
+        subvalues = t[1]
+        if name == "ENTRY":
+            entry_name = subvalues[0]
+            # Test that local isn't in the entry name (key)
+            assert not entry_name.endswith("]")
     return True
 
 # =========================================
