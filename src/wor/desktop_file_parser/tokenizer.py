@@ -16,9 +16,7 @@ def tok_gen(text):
     Returns:
         (str,()).
     """
-    print(text)
-
-    reg = r"""(?P<ENTRY>^(.*)(\[.+\])?=(.*)$\n?)|(?P<COMMENT_LINE>^#(.*)\n)|(?P<EMPTY_LINE>^[ \t\r\f\v]*\n)|(?P<GROUP_HEADER>^\[(.+)\]\s*$\n?)"""
+    reg = r"""(?P<ENTRY>^(.+?)(\[.+?\])?=(.*)$\n?)|(?P<COMMENT_LINE>^#(.*)\n)|(?P<EMPTY_LINE>^[ \t\r\f\v]*\n)|(?P<GROUP_HEADER>^\[(.+?)\]\s*$\n?)"""
     r = re.compile(reg, re.MULTILINE)
 
     tok_gen.groups = OrderedDict(sorted(r.groupindex.items(), key=lambda t: t[1]))
