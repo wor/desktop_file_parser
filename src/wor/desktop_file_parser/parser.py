@@ -31,6 +31,10 @@ class DesktopFile(object):
             Name=Unkown Application
             Exec=echo %f
 
+        Also values are given as python values not non-parsed desktop values,
+        meaning boolean key doesn't have a value of "true" or "false" string but
+        a True or False.
+
         If Desktop files "Desktop Entry" group is not empty then this doesn't do
         anything.
 
