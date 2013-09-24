@@ -10,6 +10,9 @@ class DesktopFile(object):
     def __init__(self, entry_groups={}, file_name=""):
         self.entry_groups = entry_groups
         self.file_name = file_name
+        # Bashwrap command is alternative to Exec string, used with custom
+        # bashrc hack.
+        self.bashwrap_cmd = None
     def __str__(self):
         df_str = ""
         for g in self.entry_groups:
